@@ -1,6 +1,5 @@
 import org.sql2o.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Animal {
   public String name;
@@ -8,7 +7,6 @@ public class Animal {
 
   public Animal(String name) {
     this.name = name;
-    this.id = id;
   }
 
   public String getName() {

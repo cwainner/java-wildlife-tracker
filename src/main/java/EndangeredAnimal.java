@@ -10,7 +10,6 @@ public class EndangeredAnimal {
 
   public EndangeredAnimal(String name, String health, String age) {
     this.name = name;
-    this.id = id;
     this.health = health;
     this.age = age;
   }
