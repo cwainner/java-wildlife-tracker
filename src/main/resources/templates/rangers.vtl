@@ -1,0 +1,12 @@
+<h1>List of Current Rangers:</h1>
+
+#if($rangers)
+  <ul>
+    #foreach($ranger in $rangers)
+      <a href="/rangers/$ranger.getId()">$ranger.getName()</a><br>
+    #end
+  </ul>
+#end
+
+<br><a href="/rangers/new"><button class="btn btn-primary">Add a new Ranger</button></a>
+<a href="/"><button class="btn btn-primary">Back to Main page</button></a>

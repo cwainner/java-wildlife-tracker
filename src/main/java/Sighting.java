@@ -40,8 +40,37 @@ public class Sighting {
     return ranger_id;
   }
 
+  public String getRangerName(){
+    try(Connection con = DB.sql2o.open()){
+      String sql = "SELECT name FROM rangers WHERE id=:id";
+      return con.createQuery(sql)
+        .addParameter("id", this.ranger_id)
+        .executeAndFetchFirst(String.class);
+    }
+  }
+
   public String getLastSighting(){
     return getDateTimeInstance().format(sighting_time);
+  }
+
+  public boolean getStatus(){
+    return animalEndangeredStatus;
+  }
+
+  public Object getAnimal(){
+    try(Connection con = DB.sql2o.open()){
+      if(this.getStatus() == true){
+        String sql = "SELECT * FROM endangered_animals WHERE id=:id";
+        return con.createQuery(sql)
+          .addParameter("id", animal_id)
+          .executeAndFetchFirst(EndangeredAnimal.class);
+      } else{
+        String sql = "SELECT * FROM animals WHERE id=:id";
+        return con.createQuery(sql)
+          .addParameter("id", animal_id)
+          .executeAndFetchFirst(Animal.class);
+      }
+    }
   }
 
   @Override

@@ -1,0 +1,20 @@
+<h1>$ranger.getName()</h1>
+
+<h2>Ranger details:</h2>
+
+<h4>Ranger Contact Info: $ranger.getContactInfo()</h4>
+<h4>Ranger Badge Number: $ranger.getBadgeNo()</h4>
+
+<h2>Ranger animal sightings:</h2>
+#if($ranger.getSightings())
+  <ul>
+    #foreach($sighting in $ranger.getSightings())
+      <li>Animal sighted: $sighting.getAnimal().getName()</li>
+      <li>Sighting location: $sighting.getLocation()</li>
+      <li>Sighting date: $sighting.getLastSighting()</li>
+    #end
+  </ul>
+#end
+
+<br><a href="/rangers"><button class="btn btn-primary">Back to Rangers</button></a>
+<br><a href="/rangers/$ranger.getId()/delete"><button class="btn btn-warning">Delete Ranger</button></a>

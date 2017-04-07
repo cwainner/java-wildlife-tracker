@@ -16,7 +16,49 @@ public class App {
       model.put("animals", Animal.all());
       model.put("endangeredAnimals", EndangeredAnimal.all());
       model.put("sightings", Sighting.all());
+      model.put("rangers", Ranger.all());
       model.put("template", "templates/index.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    get("/rangers", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      model.put("rangers", Ranger.all());
+      model.put("template", "templates/rangers.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    post("/rangers", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      String name = request.queryParams("name");
+      String contactInfo = request.queryParams("contactInfo");
+      int badgeNo = Integer.parseInt(request.queryParams("badgeNo"));
+      Ranger ranger = new Ranger(name, contactInfo, badgeNo);
+      ranger.save();
+      model.put("rangers", Ranger.all());
+      model.put("template", "templates/rangers.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    get("/rangers/new", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      model.put("template", "templates/ranger-form.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    get("/rangers/:rangerId", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      Ranger ranger = Ranger.find(Integer.parseInt(request.params("rangerId")));
+      model.put("ranger", ranger);
+      model.put("template", "templates/ranger.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    get("/rangers/:rangerId/delete", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      Ranger ranger = Ranger.find(Integer.parseInt(request.params("rangerId")));
+      ranger.delete();
+      response.redirect("/rangers");
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 

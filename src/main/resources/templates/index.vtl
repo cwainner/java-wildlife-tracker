@@ -16,7 +16,13 @@
     <label>Location</label>
     <input type="text" name="latLong">
     <label>Your Name</label>
-    <input type="text" name="rangerName">
+    <select name="rangerId">
+      #if($rangers)
+        #foreach($ranger in $rangers)
+          <option value="$ranger.getId()">$ranger.getName()</option>
+        #end
+      #end
+    </select>
     <button type="submit">Submit Report</button>
   #end
 </form>
@@ -36,7 +42,13 @@
     <label>Location</label>
     <input type="text" name="latLong">
     <label>Your Name</label>
-    <input type="text" name="rangerName">
+    <select name="rangerId">
+      #if($rangers)
+        #foreach($ranger in $rangers)
+          <option value="$ranger.getId()">$ranger.getName()</option>
+        #end
+      #end
+    </select>
     <button type="submit">Submit Report</button>
   #end
 </form>
@@ -68,3 +80,6 @@
     </a>
   #end
 #end
+
+
+<br><a href="/rangers">View Rangers</a>

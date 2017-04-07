@@ -8,6 +8,9 @@ public class Ranger implements Entity{
   private int badgeNo;
 
   public Ranger(String name, String contactInfo, int badgeNo){
+    if(name.equals("") || contactInfo.equals("") || badgeNo <= 0){
+      throw new IllegalArgumentException("You cannot have empty inputs");
+    }
     this.name = name;
     this.contactInfo = contactInfo;
     this.badgeNo = badgeNo;
@@ -49,6 +52,11 @@ public class Ranger implements Entity{
     try(Connection con = DB.sql2o.open()){
       String sql = "DELETE FROM rangers WHERE id=:id";
       con.createQuery(sql)
+        .addParameter("id", this.id)
+        .executeUpdate();
+
+      String deleteSightingsQuery = "DELETE FROM sightings WHERE ranger_id = :id";
+      con.createQuery(deleteSightingsQuery)
         .addParameter("id", this.id)
         .executeUpdate();
     }

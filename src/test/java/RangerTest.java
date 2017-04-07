@@ -72,4 +72,12 @@ public class RangerTest{
     testSighting.save();
     assertTrue(testRanger.getSightings().get(0).equals(testSighting));
   }
+
+  @Test
+  public void delete_deletesRangerFromDB(){
+    Ranger testRanger = new Ranger("Joe", "999-999-9999", 1);
+    testRanger.save();
+    testRanger.delete();
+    assertEquals(0, Ranger.all().size());
+  }
 }
