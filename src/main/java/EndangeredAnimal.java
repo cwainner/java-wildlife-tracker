@@ -2,9 +2,9 @@ import org.sql2o.*;
 import java.util.*;
 
 public class EndangeredAnimal implements Entity{
-  public String name;
-  public int id;
-  public boolean endangered;
+  private String name;
+  private int id;
+  private boolean endangered;
   private String health;
   private String age;
 

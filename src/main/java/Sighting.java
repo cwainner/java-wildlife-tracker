@@ -1,4 +1,6 @@
 import org.sql2o.*;
+
+import java.sql.Timestamp;
 import java.util.List;
 public class Sighting {
   private int animal_id;
@@ -26,6 +28,15 @@ public class Sighting {
 
   public String getRangerName() {
     return ranger_name;
+  }
+
+  public Timestamp getLastSighting(){
+    try(Connection con = DB.sql2o.open()){
+      String sql = "SELECT sighting_time FROM sightings WHERE id=:id";
+      return con.createQuery(sql)
+        .addParameter("id", this.getId())
+        .executeAndFetchFirst(Timestamp.class);
+    }
   }
 
   @Override
