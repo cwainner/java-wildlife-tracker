@@ -1,6 +1,5 @@
 import org.sql2o.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class EndangeredAnimal {
   public String name;
