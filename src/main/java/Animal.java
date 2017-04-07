@@ -1,7 +1,7 @@
 import org.sql2o.*;
 import java.util.*;
 
-public class Animal {
+public class Animal implements Entity{
   public String name;
   public int id;
 
@@ -9,10 +9,12 @@ public class Animal {
     this.name = name;
   }
 
+  @Override
   public String getName() {
     return name;
   }
 
+  @Override
   public int getId() {
     return id;
   }
@@ -27,6 +29,7 @@ public class Animal {
     }
   }
 
+  @Override
   public void save() {
     try(Connection con = DB.sql2o.open()) {
       String sql = "INSERT INTO animals (name) VALUES (:name);";
@@ -34,6 +37,37 @@ public class Animal {
         .addParameter("name", this.name)
         .executeUpdate()
         .getKey();
+    }
+  }
+
+  @Override
+  public void updateName(String name) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE animals SET name=:name WHERE id=:id;";
+      con.createQuery(sql)
+        .addParameter("id", id)
+        .addParameter("name", name)
+        .executeUpdate();
+    }
+  }
+
+  @Override
+  public void delete() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "DELETE FROM animals WHERE id=:id;";
+      con.createQuery(sql)
+        .addParameter("id", id)
+        .executeUpdate();
+    }
+  }
+
+  public List<Sighting> getSightings() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT * FROM sightings WHERE animal_id=:id;";
+        List<Sighting> sightings = con.createQuery(sql)
+          .addParameter("id", id)
+          .executeAndFetch(Sighting.class);
+      return sightings;
     }
   }
 
@@ -54,34 +88,4 @@ public class Animal {
       return animal;
     }
   }
-
-  public void updateName(String name) {
-    try(Connection con = DB.sql2o.open()) {
-      String sql = "UPDATE animals SET name=:name WHERE id=:id;";
-      con.createQuery(sql)
-        .addParameter("id", id)
-        .addParameter("name", name)
-        .executeUpdate();
-    }
-  }
-
-  public void delete() {
-    try(Connection con = DB.sql2o.open()) {
-      String sql = "DELETE FROM animals WHERE id=:id;";
-      con.createQuery(sql)
-        .addParameter("id", id)
-        .executeUpdate();
-    }
-  }
-
-  public List<Sighting> getSightings() {
-    try(Connection con = DB.sql2o.open()) {
-      String sql = "SELECT * FROM sightings WHERE animal_id=:id;";
-        List<Sighting> sightings = con.createQuery(sql)
-          .addParameter("id", id)
-          .executeAndFetch(Sighting.class);
-      return sightings;
-    }
-  }
-
 }
