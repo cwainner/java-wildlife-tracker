@@ -4,9 +4,10 @@ import java.util.*;
 public class EndangeredAnimal implements Entity{
   private String name;
   private int id;
-  private boolean endangered;
   private String health;
   private String age;
+
+  private final boolean endangered = true;
 
   public EndangeredAnimal(String name, String health, String age) {
     if(name.equals("") || health.equals("") || age.equals("")){
@@ -23,6 +24,10 @@ public class EndangeredAnimal implements Entity{
 
   public String getAge() {
     return age;
+  }
+
+  public boolean getStatus(){
+    return endangered;
   }
 
   @Override
@@ -65,6 +70,12 @@ public class EndangeredAnimal implements Entity{
       con.createQuery(sql)
         .addParameter("id", this.getId())
         .executeUpdate();
+      
+      String sightingDeleteQuery = "DELETE FROM sightings WHERE animal_id = :id AND status=:status";
+      con.createQuery(sightingDeleteQuery)
+        .addParameter("id", this.id)
+        .addParameter("status", this.endangered)
+        .executeUpdate();
     }
   }
 
@@ -101,9 +112,10 @@ public class EndangeredAnimal implements Entity{
 
   public List<Sighting> getSightings() {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "SELECT * FROM sightings WHERE animal_id=:id;";
+      String sql = "SELECT * FROM sightings WHERE animal_id=:id AND status=:status;";
         List<Sighting> sightings = con.createQuery(sql)
           .addParameter("id", id)
+          .addParameter("status", this.endangered)
           .executeAndFetch(Sighting.class);
       return sightings;
     }

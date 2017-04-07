@@ -7,8 +7,10 @@
   <p>To report a sighting, please visit the <a href="/">home page</a>.</p>
 #else
   #foreach($sighting in $animal.getSightings())
-    Location: $sighting.getLocation()
-    Reported by: $sighting.getRangerName()
-    ID: >$sighting.getId()
+    Location: $sighting.getLocation()<br>
+    Reported by: $sighting.getRangerName()<br>
+    ID: >$sighting.getId()<br>
   #end
 #end
+
+<a href="/animal/$animal.getId()/delete"><button class="btn btn-primary">Delete this animal</button></a>

@@ -7,14 +7,16 @@ public class Sighting {
   private String location;
   private String ranger_name;
   private int id;
+  private boolean animalEndangeredStatus;
 
-  public Sighting(int animal_id, String location, String ranger_name) {
+  public Sighting(int animal_id, String location, String ranger_name, boolean status) {
     if(animal_id <= 0 || location.equals("") || ranger_name.equals("")){
       throw new IllegalArgumentException("You cannot have empty inputs.");
     }
     this.animal_id = animal_id;
     this.location = location;
     this.ranger_name = ranger_name;
+    this.animalEndangeredStatus = status;
   }
 
   public int getId() {
@@ -35,9 +37,10 @@ public class Sighting {
 
   public Timestamp getLastSighting(){
     try(Connection con = DB.sql2o.open()){
-      String sql = "SELECT sighting_time FROM sightings WHERE id=:id";
+      String sql = "SELECT sighting_time FROM sightings WHERE id=:id AND status=:status";
       return con.createQuery(sql)
         .addParameter("id", this.getId())
+        .addParameter("status", this.animalEndangeredStatus)
         .executeAndFetchFirst(Timestamp.class);
     }
   }
@@ -54,11 +57,12 @@ public class Sighting {
 
   public void save() {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "INSERT INTO sightings (animal_id, location, ranger_name, sighting_time) VALUES (:animal_id, :location, :ranger_name, now());";
+      String sql = "INSERT INTO sightings (animal_id, location, ranger_name, sighting_time, status) VALUES (:animal_id, :location, :ranger_name, now(), :status);";
       this.id = (int) con.createQuery(sql, true)
         .addParameter("animal_id", this.animal_id)
         .addParameter("location", this.location)
         .addParameter("ranger_name", this.ranger_name)
+        .addParameter("status", this.animalEndangeredStatus)
         .throwOnMappingFailure(false)
         .executeUpdate()
         .getKey();

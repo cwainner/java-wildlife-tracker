@@ -4,6 +4,8 @@ import java.util.*;
 public class Animal implements Entity{
   private String name;
   private int id;
+  
+  private final boolean endangered = false;
 
   public Animal(String name) {
     if(name.equals("")){
@@ -20,6 +22,10 @@ public class Animal implements Entity{
   @Override
   public int getId() {
     return id;
+  }
+
+  public boolean getStatus(){
+    return endangered;
   }
 
   @Override
@@ -59,16 +65,23 @@ public class Animal implements Entity{
     try(Connection con = DB.sql2o.open()) {
       String sql = "DELETE FROM animals WHERE id=:id;";
       con.createQuery(sql)
-        .addParameter("id", id)
+        .addParameter("id", this.id)
+        .executeUpdate();
+
+      String sightingsDeleteQuery = "DELETE FROM sightings WHERE animal_id = :id AND status = :status";
+      con.createQuery(sightingsDeleteQuery)
+        .addParameter("id", this.id)
+        .addParameter("status", this.endangered)
         .executeUpdate();
     }
   }
 
   public List<Sighting> getSightings() {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "SELECT * FROM sightings WHERE animal_id=:id;";
+      String sql = "SELECT * FROM sightings WHERE animal_id=:id AND status=:status;";
         List<Sighting> sightings = con.createQuery(sql)
           .addParameter("id", id)
+          .addParameter("status", this.endangered)
           .executeAndFetch(Sighting.class);
       return sightings;
     }

@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -68,6 +69,16 @@ public class SightingTest {
   @Test
   public void find_returnsNullWhenNoAnimalFound_null() {
     assertTrue(Animal.find(999) == null);
+  }
+
+  @Test
+  public void getLastSighting_returnsLastSightingTimestamp(){
+    Animal testAnimal = new Animal("Deer");
+    testAnimal.save();
+    Sighting testSighting = new Sighting (testAnimal.getId(), "45.472428, -121.946466", "Ranger Avery");
+    testSighting.save();
+    Timestamp rightNow = new Timestamp(new Date().getTime());
+    assertEquals(DateFormat.getDateTimeInstance().format(rightNow), DateFormat.getDateTimeInstance().format(testSighting.getLastSighting()));
   }
 
 }
