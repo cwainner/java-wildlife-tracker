@@ -110,7 +110,8 @@ CREATE TABLE sightings (
     animal_id integer,
     location character varying,
     ranger_name character varying,
-    sighting_time timestamp without time zone
+    sighting_time timestamp without time zone,
+    status boolean
 );
 
 
@@ -163,6 +164,7 @@ ALTER TABLE ONLY sightings ALTER COLUMN id SET DEFAULT nextval('sightings_id_seq
 --
 
 COPY animals (id, name) FROM stdin;
+5	bear
 \.
 
 
@@ -170,7 +172,7 @@ COPY animals (id, name) FROM stdin;
 -- Name: animals_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chris
 --
 
-SELECT pg_catalog.setval('animals_id_seq', 1, true);
+SELECT pg_catalog.setval('animals_id_seq', 5, true);
 
 
 --
@@ -178,6 +180,7 @@ SELECT pg_catalog.setval('animals_id_seq', 1, true);
 --
 
 COPY endangered_animals (id, name, health, age) FROM stdin;
+5	wolf	Healthy	Adult
 \.
 
 
@@ -185,14 +188,15 @@ COPY endangered_animals (id, name, health, age) FROM stdin;
 -- Name: endangered_animals_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chris
 --
 
-SELECT pg_catalog.setval('endangered_animals_id_seq', 1, false);
+SELECT pg_catalog.setval('endangered_animals_id_seq', 5, true);
 
 
 --
 -- Data for Name: sightings; Type: TABLE DATA; Schema: public; Owner: chris
 --
 
-COPY sightings (id, animal_id, location, ranger_name, sighting_time) FROM stdin;
+COPY sightings (id, animal_id, location, ranger_name, sighting_time, status) FROM stdin;
+10	5	river falls	Jack	2017-04-07 10:55:47.802464	f
 \.
 
 
@@ -200,7 +204,7 @@ COPY sightings (id, animal_id, location, ranger_name, sighting_time) FROM stdin;
 -- Name: sightings_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chris
 --
 
-SELECT pg_catalog.setval('sightings_id_seq', 1, true);
+SELECT pg_catalog.setval('sightings_id_seq', 10, true);
 
 
 --

@@ -1,6 +1,7 @@
 import org.sql2o.*;
 
 import java.sql.Timestamp;
+import static java.text.DateFormat.*;
 import java.util.List;
 public class Sighting {
   private int animal_id;
@@ -8,6 +9,7 @@ public class Sighting {
   private String ranger_name;
   private int id;
   private boolean animalEndangeredStatus;
+  private Timestamp sighting_time;
 
   public Sighting(int animal_id, String location, String ranger_name, boolean status) {
     if(animal_id <= 0 || location.equals("") || ranger_name.equals("")){
@@ -35,14 +37,8 @@ public class Sighting {
     return ranger_name;
   }
 
-  public Timestamp getLastSighting(){
-    try(Connection con = DB.sql2o.open()){
-      String sql = "SELECT sighting_time FROM sightings WHERE id=:id AND status=:status";
-      return con.createQuery(sql)
-        .addParameter("id", this.getId())
-        .addParameter("status", this.animalEndangeredStatus)
-        .executeAndFetchFirst(Timestamp.class);
-    }
+  public String getLastSighting(){
+    return getDateTimeInstance().format(sighting_time);
   }
 
   @Override
