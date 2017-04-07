@@ -6,6 +6,9 @@ public class Animal implements Entity{
   private int id;
 
   public Animal(String name) {
+    if(name.equals("")){
+      throw new IllegalArgumentException("You cannot have an empty input");
+    }
     this.name = name;
   }
 

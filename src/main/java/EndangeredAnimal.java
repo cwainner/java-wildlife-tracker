@@ -9,6 +9,9 @@ public class EndangeredAnimal implements Entity{
   private String age;
 
   public EndangeredAnimal(String name, String health, String age) {
+    if(name.equals("") || health.equals("") || age.equals("")){
+      throw new IllegalArgumentException("You cannot have empty inputs");
+    }
     this.name = name;
     this.health = health;
     this.age = age;

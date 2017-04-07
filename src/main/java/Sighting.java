@@ -9,6 +9,9 @@ public class Sighting {
   private int id;
 
   public Sighting(int animal_id, String location, String ranger_name) {
+    if(animal_id <= 0 || location.equals("") || ranger_name.equals("")){
+      throw new IllegalArgumentException("You cannot have empty inputs.");
+    }
     this.animal_id = animal_id;
     this.location = location;
     this.ranger_name = ranger_name;
