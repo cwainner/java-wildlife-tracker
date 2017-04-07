@@ -1,9 +1,5 @@
 import org.junit.*;
-import org.sql2o.*;
 import static org.junit.Assert.*;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.util.Date;
@@ -17,7 +13,7 @@ public class SightingTest {
   public void sighting_instantiatesCorrectly_true() {
     Animal testAnimal = new Animal("Deer");
     testAnimal.save();
-    Sighting testSighting = new Sighting(testAnimal.getId(), "45.472428, -121.946466", "Ranger Avery");
+    Sighting testSighting = new Sighting(testAnimal.getId(), "45.472428, -121.946466", 1, testAnimal.getStatus());
     assertEquals(true, testSighting instanceof Sighting);
   }
 
@@ -25,8 +21,8 @@ public class SightingTest {
   public void equals_returnsTrueIfLocationAndDescriptionAreSame_true() {
     Animal testAnimal = new Animal("Deer");
     testAnimal.save();
-    Sighting testSighting = new Sighting(testAnimal.getId(), "45.472428, -121.946466", "Ranger Avery");
-    Sighting anotherSighting = new Sighting(testAnimal.getId(), "45.472428, -121.946466", "Ranger Avery");
+    Sighting testSighting = new Sighting(testAnimal.getId(), "45.472428, -121.946466", 1, testAnimal.getStatus());
+    Sighting anotherSighting = new Sighting(testAnimal.getId(), "45.472428, -121.946466", 1, testAnimal.getStatus());
     assertTrue(testSighting.equals(anotherSighting));
   }
 
@@ -34,7 +30,7 @@ public class SightingTest {
   public void save_insertsObjectIntoDatabase_Sighting() {
     Animal testAnimal = new Animal("Deer");
     testAnimal.save();
-    Sighting testSighting = new Sighting (testAnimal.getId(), "45.472428, -121.946466", "Ranger Avery");
+    Sighting testSighting = new Sighting (testAnimal.getId(), "45.472428, -121.946466", 1, testAnimal.getStatus());
     testSighting.save();
     assertEquals(true, Sighting.all().get(0).equals(testSighting));
   }
@@ -43,11 +39,11 @@ public class SightingTest {
   public void all_returnsAllInstancesOfSighting_true() {
     Animal testAnimal = new Animal("Deer");
     testAnimal.save();
-    Sighting testSighting = new Sighting (testAnimal.getId(), "45.472428, -121.946466", "Ranger Avery");
+    Sighting testSighting = new Sighting (testAnimal.getId(), "45.472428, -121.946466", 1, testAnimal.getStatus());
     testSighting.save();
     Animal secondTestAnimal = new Animal("Badger");
     secondTestAnimal.save();
-    Sighting secondTestSighting = new Sighting (testAnimal.getId(), "45.472428, -121.946466", "Ranger Reese");
+    Sighting secondTestSighting = new Sighting (testAnimal.getId(), "45.472428, -121.946466", 2, testAnimal.getStatus());
     secondTestSighting.save();
     assertEquals(true, Sighting.all().get(0).equals(testSighting));
     assertEquals(true, Sighting.all().get(1).equals(secondTestSighting));
@@ -57,11 +53,11 @@ public class SightingTest {
   public void find_returnsSightingWithSameId_secondSighting() {
     Animal testAnimal = new Animal("Deer");
     testAnimal.save();
-    Sighting testSighting = new Sighting (testAnimal.getId(), "45.472428, -121.946466", "Ranger Avery");
+    Sighting testSighting = new Sighting (testAnimal.getId(), "45.472428, -121.946466", 1, testAnimal.getStatus());
     testSighting.save();
     Animal secondTestAnimal = new Animal("Badger");
     secondTestAnimal.save();
-    Sighting secondTestSighting = new Sighting (testAnimal.getId(), "45.472428, -121.946466", "Ranger Reese");
+    Sighting secondTestSighting = new Sighting (testAnimal.getId(), "45.472428, -121.946466", 2, testAnimal.getStatus());
     secondTestSighting.save();
     assertEquals(Sighting.find(secondTestSighting.getId()), secondTestSighting);
   }
@@ -75,10 +71,10 @@ public class SightingTest {
   public void getLastSighting_returnsLastSightingTimestamp(){
     Animal testAnimal = new Animal("Deer");
     testAnimal.save();
-    Sighting testSighting = new Sighting (testAnimal.getId(), "45.472428, -121.946466", "Ranger Avery");
+    Sighting testSighting = new Sighting (testAnimal.getId(), "45.472428, -121.946466", 1, testAnimal.getStatus());
     testSighting.save();
     Timestamp rightNow = new Timestamp(new Date().getTime());
-    assertEquals(DateFormat.getDateTimeInstance().format(rightNow), DateFormat.getDateTimeInstance().format(testSighting.getLastSighting()));
+    assertEquals(DateFormat.getDateTimeInstance().format(rightNow), testSighting.getLastSighting());
   }
 
 }

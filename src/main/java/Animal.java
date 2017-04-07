@@ -49,7 +49,6 @@ public class Animal implements Entity{
     }
   }
 
-  @Override
   public void updateName(String name) {
     try(Connection con = DB.sql2o.open()) {
       String sql = "UPDATE animals SET name=:name WHERE id=:id;";

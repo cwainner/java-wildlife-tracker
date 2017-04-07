@@ -22,12 +22,12 @@ public class App {
 
     post("/endangered_sighting", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
-      String rangerName = request.queryParams("rangerName");
+      int rangerId = Integer.parseInt(request.queryParams("rangerId"));
       int animalIdSelected = Integer.parseInt(request.queryParams("endangeredAnimalSelected"));
       boolean endangeredStatus = EndangeredAnimal.find(animalIdSelected).getStatus();
       String latLong = request.queryParams("latLong");
       try{
-        Sighting sighting = new Sighting(animalIdSelected, latLong, rangerName, endangeredStatus);
+        Sighting sighting = new Sighting(animalIdSelected, latLong, rangerId, endangeredStatus);
         sighting.save();
         model.put("sighting", sighting);
       } catch(IllegalArgumentException exception){
@@ -42,13 +42,13 @@ public class App {
 
     post("/sighting", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
-      String rangerName = request.queryParams("rangerName");
+      int rangerId = Integer.parseInt(request.queryParams("rangerId"));
       int animalIdSelected = Integer.parseInt(request.queryParams("animalSelected"));
       String latLong = request.queryParams("latLong");
       boolean endangeredStatus = Animal.find(animalIdSelected).getStatus();
       Sighting sighting;
       try{
-        sighting = new Sighting(animalIdSelected, latLong, rangerName, endangeredStatus);
+        sighting = new Sighting(animalIdSelected, latLong, rangerId, endangeredStatus);
         sighting.save();
         model.put("sighting", sighting);
       } catch(IllegalArgumentException exception){

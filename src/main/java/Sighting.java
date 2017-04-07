@@ -2,23 +2,26 @@ import org.sql2o.*;
 
 import java.sql.Timestamp;
 import static java.text.DateFormat.*;
+
+import java.util.Date;
 import java.util.List;
 public class Sighting {
   private int animal_id;
   private String location;
-  private String ranger_name;
+  private int ranger_id;
   private int id;
   private boolean animalEndangeredStatus;
   private Timestamp sighting_time;
 
-  public Sighting(int animal_id, String location, String ranger_name, boolean status) {
-    if(animal_id <= 0 || location.equals("") || ranger_name.equals("")){
+  public Sighting(int animal_id, String location, int ranger_id, boolean status) {
+    if(animal_id <= 0 || location.equals("") || ranger_id <= 0){
       throw new IllegalArgumentException("You cannot have empty inputs.");
     }
     this.animal_id = animal_id;
     this.location = location;
-    this.ranger_name = ranger_name;
+    this.ranger_id = ranger_id;
     this.animalEndangeredStatus = status;
+    this.sighting_time = new Timestamp(new Date().getTime());
   }
 
   public int getId() {
@@ -33,8 +36,8 @@ public class Sighting {
     return location;
   }
 
-  public String getRangerName() {
-    return ranger_name;
+  public int getRangerId() {
+    return ranger_id;
   }
 
   public String getLastSighting(){
@@ -47,17 +50,18 @@ public class Sighting {
       return false;
     } else {
       Sighting newSighting = (Sighting) otherSighting;
-      return this.getAnimalId() == (newSighting.getAnimalId()) && this.getLocation().equals(newSighting.getLocation()) && this.getRangerName().equals(newSighting.getRangerName());
+      return this.getAnimalId() == (newSighting.getAnimalId()) && this.getLocation().equals(newSighting.getLocation()) && this.getRangerId() == newSighting.getRangerId();
     }
   }
 
   public void save() {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "INSERT INTO sightings (animal_id, location, ranger_name, sighting_time, status) VALUES (:animal_id, :location, :ranger_name, now(), :status);";
+      String sql = "INSERT INTO sightings (animal_id, location, ranger_id, sighting_time, status) VALUES (:animal_id, :location, :ranger_id, :sighting_time, :status);";
       this.id = (int) con.createQuery(sql, true)
         .addParameter("animal_id", this.animal_id)
         .addParameter("location", this.location)
-        .addParameter("ranger_name", this.ranger_name)
+        .addParameter("ranger_id", this.ranger_id)
+        .addParameter("sighting_time", this.sighting_time)
         .addParameter("status", this.animalEndangeredStatus)
         .throwOnMappingFailure(false)
         .executeUpdate()
