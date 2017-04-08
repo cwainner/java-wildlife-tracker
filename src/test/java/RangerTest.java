@@ -68,7 +68,7 @@ public class RangerTest{
   public void getSightings_returnsAllSightingsForRanger(){
     Ranger testRanger = new Ranger("Joe", "999-999-9999", 1);
     testRanger.save();
-    Sighting testSighting = new Sighting(1, "River", testRanger.getId(), false);
+    Sighting testSighting = new Sighting("deer", 1, "River", testRanger.getId(), false);
     testSighting.save();
     assertTrue(testRanger.getSightings().get(0).equals(testSighting));
   }

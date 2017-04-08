@@ -9,7 +9,7 @@
 #if($ranger.getSightings())
   <ul>
     #foreach($sighting in $ranger.getSightings())
-      <li>Animal sighted: $sighting.getAnimal().getName()</li>
+      <li>Animal sighted: $sighting.getAnimalName()</li>
       <li>Sighting location: $sighting.getLocation()</li>
       <li>Sighting date: $sighting.getLastSighting()</li>
     #end

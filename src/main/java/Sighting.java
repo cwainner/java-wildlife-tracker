@@ -6,6 +6,7 @@ import static java.text.DateFormat.*;
 import java.util.Date;
 import java.util.List;
 public class Sighting {
+  private String animal_name;
   private int animal_id;
   private String location;
   private int ranger_id;
@@ -13,10 +14,11 @@ public class Sighting {
   private boolean animalEndangeredStatus;
   private Timestamp sighting_time;
 
-  public Sighting(int animal_id, String location, int ranger_id, boolean status) {
-    if(animal_id <= 0 || location.equals("") || ranger_id <= 0){
+  public Sighting(String animal_name, int animal_id, String location, int ranger_id, boolean status) {
+    if(animal_name.equals("") || animal_id <= 0 || location.equals("") || ranger_id <= 0){
       throw new IllegalArgumentException("You cannot have empty inputs.");
     }
+    this.animal_name = animal_name;
     this.animal_id = animal_id;
     this.location = location;
     this.ranger_id = ranger_id;
@@ -40,6 +42,10 @@ public class Sighting {
     return ranger_id;
   }
 
+  public String getAnimalName(){
+    return animal_name;
+  }
+
   public String getRangerName(){
     try(Connection con = DB.sql2o.open()){
       String sql = "SELECT name FROM rangers WHERE id=:id";
@@ -51,26 +57,6 @@ public class Sighting {
 
   public String getLastSighting(){
     return getDateTimeInstance().format(sighting_time);
-  }
-
-  public boolean getStatus(){
-    return animalEndangeredStatus;
-  }
-
-  public Object getAnimal(){
-    try(Connection con = DB.sql2o.open()){
-      if(this.getStatus() == true){
-        String sql = "SELECT * FROM endangered_animals WHERE id=:id";
-        return con.createQuery(sql)
-          .addParameter("id", animal_id)
-          .executeAndFetchFirst(EndangeredAnimal.class);
-      } else{
-        String sql = "SELECT * FROM animals WHERE id=:id";
-        return con.createQuery(sql)
-          .addParameter("id", animal_id)
-          .executeAndFetchFirst(Animal.class);
-      }
-    }
   }
 
   @Override
@@ -85,8 +71,9 @@ public class Sighting {
 
   public void save() {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "INSERT INTO sightings (animal_id, location, ranger_id, sighting_time, status) VALUES (:animal_id, :location, :ranger_id, :sighting_time, :status);";
+      String sql = "INSERT INTO sightings (animal_name, animal_id, location, ranger_id, sighting_time, status) VALUES (:animal_name, :animal_id, :location, :ranger_id, :sighting_time, :status);";
       this.id = (int) con.createQuery(sql, true)
+        .addParameter("animal_name", this.animal_name)
         .addParameter("animal_id", this.animal_id)
         .addParameter("location", this.location)
         .addParameter("ranger_id", this.ranger_id)
