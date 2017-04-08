@@ -4,14 +4,18 @@ import java.util.*;
 public class Animal implements Entity{
   private String name;
   private int id;
+  private String health;
+  private String age;
   
   private final boolean endangered = false;
 
-  public Animal(String name) {
-    if(name.equals("")){
+  public Animal(String name, String health, String age) {
+    if(name.equals("") || health.equals("") || age.equals("")){
       throw new IllegalArgumentException("You cannot have an empty input");
     }
     this.name = name;
+    this.health = health;
+    this.age = age;
   }
 
   @Override
@@ -22,6 +26,14 @@ public class Animal implements Entity{
   @Override
   public int getId() {
     return id;
+  }
+
+  public String getHealth(){
+    return health;
+  }
+
+  public String getAge(){
+    return age;
   }
 
   public boolean getStatus(){
@@ -41,20 +53,32 @@ public class Animal implements Entity{
   @Override
   public void save() {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "INSERT INTO animals (name) VALUES (:name);";
+      String sql = "INSERT INTO animals (name, health, age) VALUES (:name, :health, :age);";
       this.id = (int) con.createQuery(sql, true)
         .addParameter("name", this.name)
+        .addParameter("health", this.health)
+        .addParameter("age", this.age)
         .executeUpdate()
         .getKey();
     }
   }
 
-  public void updateName(String name) {
+  public void updateHealth(String health) {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "UPDATE animals SET name=:name WHERE id=:id;";
+      String sql = "UPDATE animals SET health=:health WHERE id=:id;";
       con.createQuery(sql)
         .addParameter("id", id)
-        .addParameter("name", name)
+        .addParameter("health", health)
+        .executeUpdate();
+    }
+  }
+
+  public void updateAge(String age) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE animals SET age=:age WHERE id=:id;";
+      con.createQuery(sql)
+        .addParameter("id", id)
+        .addParameter("age", age)
         .executeUpdate();
     }
   }

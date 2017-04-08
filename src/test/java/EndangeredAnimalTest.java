@@ -1,9 +1,5 @@
 import org.junit.*;
 import static org.junit.Assert.*;
-import org.sql2o.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Arrays;
 
 public class EndangeredAnimalTest {
   @Rule
@@ -54,22 +50,6 @@ public class EndangeredAnimalTest {
     testEndangeredAnimal.save();
     testEndangeredAnimal.updateHealth("ill");
     assertEquals("ill", EndangeredAnimal.find(testEndangeredAnimal.getId()).getHealth());
-  }
-
-  @Test
-  public void update_updatesAgeAttribute_true() {
-    EndangeredAnimal testEndangeredAnimal = new EndangeredAnimal("Fox", "Healthy", "Young");
-    testEndangeredAnimal.save();
-    testEndangeredAnimal.updateAge("Adult");
-    assertEquals("Adult", EndangeredAnimal.find(testEndangeredAnimal.getId()).getAge());
-  }
-
-  @Test
-  public void update_updatesNameAttribute_true() {
-    EndangeredAnimal testEndangeredAnimal = new EndangeredAnimal("Fox", "Healthy", "Young");
-    testEndangeredAnimal.save();
-    testEndangeredAnimal.updateName("Wolf");
-    assertEquals("Wolf", EndangeredAnimal.find(testEndangeredAnimal.getId()).getName());
   }
 
   @Test

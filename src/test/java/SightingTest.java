@@ -11,7 +11,7 @@ public class SightingTest {
 
   @Test
   public void sighting_instantiatesCorrectly_true() {
-    Animal testAnimal = new Animal("Deer");
+    Animal testAnimal = new Animal("Deer", "healthy", "Adult");
     testAnimal.save();
     Sighting testSighting = new Sighting(testAnimal.getName(), testAnimal.getId(), "45.472428, -121.946466", 1, testAnimal.getStatus());
     assertEquals(true, testSighting instanceof Sighting);
@@ -19,7 +19,7 @@ public class SightingTest {
 
   @Test
   public void getAnimalId_returnsCorrectAnimalId(){
-    Animal testAnimal = new Animal("Deer");
+    Animal testAnimal = new Animal("Deer", "healthy", "Adult");
     testAnimal.save();
     Sighting testSighting = new Sighting(testAnimal.getName(), testAnimal.getId(), "45.472428, -121.946466", 1, testAnimal.getStatus());
     assertEquals(testAnimal.getId(), testSighting.getAnimalId());
@@ -27,7 +27,7 @@ public class SightingTest {
 
   @Test
   public void getAnimalName_returnsCorrectAnimalName(){
-    Animal testAnimal = new Animal("Deer");
+    Animal testAnimal = new Animal("Deer", "healthy", "Adult");
     testAnimal.save();
     Sighting testSighting = new Sighting(testAnimal.getName(), testAnimal.getId(), "45.472428, -121.946466", 1, testAnimal.getStatus());
     assertEquals(testAnimal.getName(), testSighting.getAnimalName());
@@ -35,7 +35,7 @@ public class SightingTest {
 
   @Test
   public void getLocation_returnsCorrectLocation(){
-    Animal testAnimal = new Animal("Deer");
+    Animal testAnimal = new Animal("Deer", "healthy", "Adult");
     testAnimal.save();
     Sighting testSighting = new Sighting(testAnimal.getName(), testAnimal.getId(), "45.472428, -121.946466", 1, testAnimal.getStatus());
     assertEquals("45.472428, -121.946466", testSighting.getLocation());
@@ -43,7 +43,7 @@ public class SightingTest {
 
   @Test
   public void getRangerId_returnsRangerId(){
-    Animal testAnimal = new Animal("Deer");
+    Animal testAnimal = new Animal("Deer", "healthy", "Adult");
     testAnimal.save();
     Sighting testSighting = new Sighting(testAnimal.getName(), testAnimal.getId(), "45.472428, -121.946466", 1, testAnimal.getStatus());
     assertEquals(1, testSighting.getRangerId());
@@ -51,7 +51,7 @@ public class SightingTest {
 
   @Test
   public void equals_returnsTrueIfLocationAndDescriptionAreSame_true() {
-    Animal testAnimal = new Animal("Deer");
+    Animal testAnimal = new Animal("Deer", "healthy", "Adult");
     testAnimal.save();
     Sighting testSighting = new Sighting(testAnimal.getName(), testAnimal.getId(), "45.472428, -121.946466", 1, testAnimal.getStatus());
     Sighting anotherSighting = new Sighting(testAnimal.getName(), testAnimal.getId(), "45.472428, -121.946466", 1, testAnimal.getStatus());
@@ -60,7 +60,7 @@ public class SightingTest {
 
   @Test
   public void save_insertsObjectIntoDatabase_Sighting() {
-    Animal testAnimal = new Animal("Deer");
+    Animal testAnimal = new Animal("Deer", "healthy", "Adult");
     testAnimal.save();
     Sighting testSighting = new Sighting (testAnimal.getName(), testAnimal.getId(), "45.472428, -121.946466", 1, testAnimal.getStatus());
     testSighting.save();
@@ -69,11 +69,11 @@ public class SightingTest {
 
   @Test
   public void all_returnsAllInstancesOfSighting_true() {
-    Animal testAnimal = new Animal("Deer");
+    Animal testAnimal = new Animal("Deer", "healthy", "Adult");
     testAnimal.save();
     Sighting testSighting = new Sighting (testAnimal.getName(), testAnimal.getId(), "45.472428, -121.946466", 1, testAnimal.getStatus());
     testSighting.save();
-    Animal secondTestAnimal = new Animal("Badger");
+    Animal secondTestAnimal = new Animal("Badger", "healthy", "Adult");
     secondTestAnimal.save();
     Sighting secondTestSighting = new Sighting (testAnimal.getName(), testAnimal.getId(), "45.472428, -121.946466", 2, testAnimal.getStatus());
     secondTestSighting.save();
@@ -83,11 +83,11 @@ public class SightingTest {
 
   @Test
   public void find_returnsSightingWithSameId_secondSighting() {
-    Animal testAnimal = new Animal("Deer");
+    Animal testAnimal = new Animal("Deer", "healthy", "Adult");
     testAnimal.save();
     Sighting testSighting = new Sighting (testAnimal.getName(), testAnimal.getId(), "45.472428, -121.946466", 1, testAnimal.getStatus());
     testSighting.save();
-    Animal secondTestAnimal = new Animal("Badger");
+    Animal secondTestAnimal = new Animal("Badger", "healthy", "Adult");
     secondTestAnimal.save();
     Sighting secondTestSighting = new Sighting (secondTestAnimal.getName(), testAnimal.getId(), "45.472428, -121.946466", 2, testAnimal.getStatus());
     secondTestSighting.save();
@@ -101,7 +101,7 @@ public class SightingTest {
 
   @Test
   public void getLastSighting_returnsLastSightingTimestamp(){
-    Animal testAnimal = new Animal("Deer");
+    Animal testAnimal = new Animal("Deer", "healthy", "Adult");
     testAnimal.save();
     Sighting testSighting = new Sighting (testAnimal.getName(), testAnimal.getId(), "45.472428, -121.946466", 1, testAnimal.getStatus());
     testSighting.save();

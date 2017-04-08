@@ -39,7 +39,9 @@ SET default_with_oids = false;
 
 CREATE TABLE animals (
     id integer NOT NULL,
-    name character varying
+    name character varying,
+    health character varying,
+    age character varying
 );
 
 
@@ -102,6 +104,41 @@ ALTER SEQUENCE endangered_animals_id_seq OWNED BY endangered_animals.id;
 
 
 --
+-- Name: rangers; Type: TABLE; Schema: public; Owner: chris
+--
+
+CREATE TABLE rangers (
+    id integer NOT NULL,
+    name character varying,
+    contactinfo character varying,
+    badgeno integer
+);
+
+
+ALTER TABLE rangers OWNER TO chris;
+
+--
+-- Name: rangers_id_seq; Type: SEQUENCE; Schema: public; Owner: chris
+--
+
+CREATE SEQUENCE rangers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE rangers_id_seq OWNER TO chris;
+
+--
+-- Name: rangers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: chris
+--
+
+ALTER SEQUENCE rangers_id_seq OWNED BY rangers.id;
+
+
+--
 -- Name: sightings; Type: TABLE; Schema: public; Owner: chris
 --
 
@@ -109,9 +146,10 @@ CREATE TABLE sightings (
     id integer NOT NULL,
     animal_id integer,
     location character varying,
-    ranger_name character varying,
     sighting_time timestamp without time zone,
-    status boolean
+    status boolean,
+    ranger_id integer,
+    animal_name character varying
 );
 
 
@@ -156,6 +194,13 @@ ALTER TABLE ONLY endangered_animals ALTER COLUMN id SET DEFAULT nextval('endange
 -- Name: id; Type: DEFAULT; Schema: public; Owner: chris
 --
 
+ALTER TABLE ONLY rangers ALTER COLUMN id SET DEFAULT nextval('rangers_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: chris
+--
+
 ALTER TABLE ONLY sightings ALTER COLUMN id SET DEFAULT nextval('sightings_id_seq'::regclass);
 
 
@@ -163,8 +208,8 @@ ALTER TABLE ONLY sightings ALTER COLUMN id SET DEFAULT nextval('sightings_id_seq
 -- Data for Name: animals; Type: TABLE DATA; Schema: public; Owner: chris
 --
 
-COPY animals (id, name) FROM stdin;
-5	bear
+COPY animals (id, name, health, age) FROM stdin;
+7	bear	Okay	Young
 \.
 
 
@@ -172,7 +217,7 @@ COPY animals (id, name) FROM stdin;
 -- Name: animals_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chris
 --
 
-SELECT pg_catalog.setval('animals_id_seq', 5, true);
+SELECT pg_catalog.setval('animals_id_seq', 7, true);
 
 
 --
@@ -180,7 +225,6 @@ SELECT pg_catalog.setval('animals_id_seq', 5, true);
 --
 
 COPY endangered_animals (id, name, health, age) FROM stdin;
-5	wolf	Healthy	Adult
 \.
 
 
@@ -188,15 +232,33 @@ COPY endangered_animals (id, name, health, age) FROM stdin;
 -- Name: endangered_animals_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chris
 --
 
-SELECT pg_catalog.setval('endangered_animals_id_seq', 5, true);
+SELECT pg_catalog.setval('endangered_animals_id_seq', 7, true);
+
+
+--
+-- Data for Name: rangers; Type: TABLE DATA; Schema: public; Owner: chris
+--
+
+COPY rangers (id, name, contactinfo, badgeno) FROM stdin;
+3	Nancy	999-999-9999	23
+\.
+
+
+--
+-- Name: rangers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chris
+--
+
+SELECT pg_catalog.setval('rangers_id_seq', 3, true);
 
 
 --
 -- Data for Name: sightings; Type: TABLE DATA; Schema: public; Owner: chris
 --
 
-COPY sightings (id, animal_id, location, ranger_name, sighting_time, status) FROM stdin;
-10	5	river falls	Jack	2017-04-07 10:55:47.802464	f
+COPY sightings (id, animal_id, location, sighting_time, status, ranger_id, animal_name) FROM stdin;
+15	6	river falls	2017-04-08 16:07:56.732	f	3	bear
+16	7	mountain	2017-04-08 16:08:24.896	t	3	wolf
+17	7	river falls	2017-04-08 16:41:27.192	f	3	bear
 \.
 
 
@@ -204,7 +266,7 @@ COPY sightings (id, animal_id, location, ranger_name, sighting_time, status) FRO
 -- Name: sightings_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chris
 --
 
-SELECT pg_catalog.setval('sightings_id_seq', 10, true);
+SELECT pg_catalog.setval('sightings_id_seq', 17, true);
 
 
 --
@@ -221,6 +283,14 @@ ALTER TABLE ONLY animals
 
 ALTER TABLE ONLY endangered_animals
     ADD CONSTRAINT endangered_animals_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: rangers_pkey; Type: CONSTRAINT; Schema: public; Owner: chris
+--
+
+ALTER TABLE ONLY rangers
+    ADD CONSTRAINT rangers_pkey PRIMARY KEY (id);
 
 
 --

@@ -93,18 +93,8 @@ public class EndangeredAnimal implements Entity{
     try(Connection con = DB.sql2o.open()) {
       String sql = "UPDATE endangered_animals SET age=:age WHERE id=:id;";
       con.createQuery(sql)
-        .addParameter("age", age)
         .addParameter("id", id)
-        .executeUpdate();
-    }
-  }
-
-  public void updateName(String name){
-    try(Connection con = DB.sql2o.open()){
-      String sql = "UPDATE endangered_animals SET name=:name WHERE id=:id";
-      con.createQuery(sql)
-        .addParameter("name", name)
-        .addParameter("id", this.getId())
+        .addParameter("age", age)
         .executeUpdate();
     }
   }

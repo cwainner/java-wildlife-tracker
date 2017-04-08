@@ -8,10 +8,13 @@
 #else
   #foreach($sighting in $animal.getSightings())
     Location: $sighting.getLocation()<br>
+    Health: $animal.getHealth() <br>
+    Age: $animal.getAge() <br>
     Reported by: $sighting.getRangerName()<br>
     ID: >$sighting.getId()<br>
     Last Sighted: $sighting.getLastSighting()<br>
   #end
 #end
 
+<a href="/animal/$animal.getId()/update"><button class="btn btn-primary">Update this animal</button></a>
 <a href="/animal/$animal.getId()/delete"><button class="btn btn-primary">Delete this animal</button></a>
