@@ -209,7 +209,6 @@ ALTER TABLE ONLY sightings ALTER COLUMN id SET DEFAULT nextval('sightings_id_seq
 --
 
 COPY animals (id, name, health, age) FROM stdin;
-7	bear	Okay	Young
 \.
 
 
@@ -240,7 +239,6 @@ SELECT pg_catalog.setval('endangered_animals_id_seq', 7, true);
 --
 
 COPY rangers (id, name, contactinfo, badgeno) FROM stdin;
-3	Nancy	999-999-9999	23
 \.
 
 
@@ -256,9 +254,6 @@ SELECT pg_catalog.setval('rangers_id_seq', 3, true);
 --
 
 COPY sightings (id, animal_id, location, sighting_time, status, ranger_id, animal_name) FROM stdin;
-15	6	river falls	2017-04-08 16:07:56.732	f	3	bear
-16	7	mountain	2017-04-08 16:08:24.896	t	3	wolf
-17	7	river falls	2017-04-08 16:41:27.192	f	3	bear
 \.
 
 
